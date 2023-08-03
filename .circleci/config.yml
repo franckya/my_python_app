@@ -1,8 +1,15 @@
 version: 2.1
+executors:
+  docker-executor:  # Define a custom executor with Docker in Docker (DinD) service
+    docker:
+      - image: circleci/classic:latest
+        environment:
+          DOCKER_HOST: tcp://localhost:2375  # Set Docker host to access DinD service
+    working_directory: ~/repo
+
 jobs:
   build:
-    docker:
-      - image: docker:stable-git  # Use the docker:dind service image
+    executor: docker-executor  # Use the custom executor with DinD service
     steps:
       - checkout
 
@@ -27,6 +34,7 @@ workflows:
   build_and_push:
     jobs:
       - build
+
 
 
 
