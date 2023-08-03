@@ -11,6 +11,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Set ulimit value
+          command: ulimit -n 4096
+      - run:
           name: Install Docker
           command: |
             sudo curl -fsSL https://get.docker.com -o get-docker.sh
@@ -37,4 +40,3 @@ workflows:
   build_workflow:
     jobs:
       - build
-
