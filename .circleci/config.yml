@@ -1,19 +1,23 @@
 version: 2.1
+executors:
+  docker-executor:
+    docker:
+      - image: circleci/python:3.9
+
 jobs:
   build:
-    docker:
-      - image: python:3.9-slim
-
-    working_directory: /app
+    executor: docker-executor
 
     steps:
       - checkout
       - run:
           name: Install Docker
           command: |
-            apt-get update
-            apt-get install -y docker.io
-            docker version
+            sudo curl -fsSL https://get.docker.com -o get-docker.sh
+            sudo sh get-docker.sh
+      - run:
+          name: Start Docker Daemon
+          command: sudo service docker start
       - run:
           name: Install dependencies
           command: |
@@ -33,3 +37,4 @@ workflows:
   build_workflow:
     jobs:
       - build
+
