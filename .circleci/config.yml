@@ -2,17 +2,9 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: python:3.9  # Use an appropriate Python base image
+      - image: docker:stable-git  # Use the docker:dind service image
     steps:
       - checkout
-
-      # Install Docker CLI in the build container
-      - run:
-          name: Install Docker CLI
-          command: |
-            curl -fsSL https://get.docker.com -o get-docker.sh
-            sh get-docker.sh
-            docker version
 
       # Build the Docker image
       - run:
