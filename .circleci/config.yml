@@ -2,7 +2,10 @@ version: 2.1
 executors:
   docker-executor:
     docker:
-      - image: circleci/python:3.9
+      - image: cimg/base:2020.01
+        environment:
+          # Set the DOCKER_CLI_ACI variable to disable BuildKit for Docker versions 20.10+
+          DOCKER_CLI_ACI: "1"
 
 jobs:
   build_and_push_image:
@@ -10,11 +13,14 @@ jobs:
     steps:
       - checkout
 
+      - setup_remote_docker:
+          version: 20.10.8
+
       - run:
-          name: Install dependencies
+          name: Install Docker Compose
           command: |
             sudo apt-get update
-            sudo apt-get install -y docker.io
+            sudo apt-get install -y docker-compose
 
       - run:
           name: Build Docker image
@@ -33,6 +39,5 @@ workflows:
   build_and_push:
     jobs:
       - build_and_push_image
-
 
 
