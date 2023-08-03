@@ -14,7 +14,6 @@ jobs:
       - checkout
 
       - setup_remote_docker:
-          version: 20.10.8
 
       - run:
           name: Install Docker Compose
@@ -39,5 +38,6 @@ workflows:
   build_and_push:
     jobs:
       - build_and_push_image
+
 
 
