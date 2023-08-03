@@ -2,9 +2,11 @@ version: 2.1
 jobs:
   build_and_push_image:
     docker:
-      - image: python:3.8
+      - image: circleci/docker:20.10.18
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.18
       - run:
           name: Build Docker Image
           command: |
@@ -20,6 +22,7 @@ workflows:
   build_and_push:
     jobs:
       - build_and_push_image
+
 
 
 
