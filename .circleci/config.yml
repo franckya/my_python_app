@@ -7,7 +7,13 @@ jobs:
     steps:
       - checkout
 
-      # Authenticate Docker using build-time secrets
+      # Check Docker daemon status and start Docker service if needed
+      - run:
+          name: Check Docker daemon
+          command: |
+            sudo systemctl status docker || sudo systemctl start docker
+
+      # Authenticate Docker using build-time secrets and build & push the image
       - run:
           name: Build and push Docker image
           command: |
