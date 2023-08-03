@@ -9,7 +9,7 @@ jobs:
           name: Install Docker
           command: |
             curl -fsSL https://get.docker.com | sh
-            service docker start
+            sudo service docker start
       - run:
           name: Build Docker Image
           command: |
@@ -25,7 +25,6 @@ workflows:
   build_and_push:
     jobs:
       - build_and_push_image
-
 
 
 
