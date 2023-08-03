@@ -1,33 +1,40 @@
 version: 2.1
 jobs:
-  build_and_push_image:
+  build:
     docker:
-      - image: circleci/python:3.8  # Choose an appropriate base image for your project
-
+      - image: python:3.9  # Use an appropriate Python base image
     steps:
       - checkout
 
-      # Check Docker daemon status and start Docker service if needed
+      # Install Docker CLI in the build container
       - run:
-          name: Check Docker daemon
+          name: Install Docker CLI
           command: |
-            sudo systemctl status docker || sudo systemctl start docker
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sh get-docker.sh
+            docker version
 
-      # Authenticate Docker using build-time secrets and build & push the image
+      # Build the Docker image
       - run:
-          name: Build and push Docker image
+          name: Build Docker image
           command: |
-            docker build -t yakengne/python_api:1.0 \
-                         --build-arg DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME \
-                         --build-arg DOCKERHUB_TOKEN=$DOCKERHUB_TOKEN \
-                         .
-            docker push yakengne/python_api:1.0
+            docker build -t yakengne/python_api:1.0 .
+
+      # Log in to Docker Hub
+      - run:
+          name: Log in to Docker Hub
+          command: echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+      # Push the Docker image to Docker Hub
+      - run:
+          name: Push Docker image to Docker Hub
+          command: docker push yakengne/python_api:1.0
 
 workflows:
   version: 2
   build_and_push:
     jobs:
-      - build_and_push_image
+      - build
 
 
 
