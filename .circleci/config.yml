@@ -1,17 +1,27 @@
 version: 2.1
+executors:
+  docker-executor:
+    docker:
+      - image: ubuntu:20.04
+
 jobs:
-  build:
-    machine:
-      image: ubuntu-2004:202106-01
+  build-and-push:
+    executor: docker-executor
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.8
 
-      # Your existing steps for building and pushing the Docker image
+      # Install Docker inside the Docker executor
+      - run:
+          name: Install Docker
+          command: |
+            sudo apt-get update -y
+            sudo apt-get install -y docker.io
+
+      # Build and push the Docker image
       - run:
           name: Build and Push Docker Image
           command: |
             docker build -t yakengne/python_api.1.0 .
             docker login -u yakengne -p $DOCKERHUB_PASSWORD
             docker push yakengne/python_api.1.0
+
