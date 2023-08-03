@@ -25,3 +25,9 @@ jobs:
             docker login -u yakengne -p $DOCKERHUB_PASSWORD
             docker push yakengne/python_api.1.0
 
+workflows:
+  version: 2
+  build-and-push:
+    jobs:
+      - build-and-push
+
