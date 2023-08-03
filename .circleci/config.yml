@@ -8,8 +8,12 @@ jobs:
 
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.8
+      - run:
+          name: Install Docker
+          command: |
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sh get-docker.sh
+            docker version
       - run:
           name: Install dependencies
           command: |
@@ -29,4 +33,3 @@ workflows:
   build_workflow:
     jobs:
       - build
-
